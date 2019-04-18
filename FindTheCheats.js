@@ -37,14 +37,15 @@ data.then(function(data)
 
     })
 
-    correlations = correlations.map(function(d)
-  {
-        d.forEach(function(d2){
-          return d2;
-        })
-  })
+    var newCorrelations = [];
+    correlations.forEach(function(d1,i){
+          d1.forEach(function(d,i){
+            newCorrelations.push(d);
+          })
 
-  console.log(correlations);
+    });
+
+  console.log(newCorrelations);
     var margin = {top: 30, right: 30, bottom: 30, left: 30},
   width = 450 - margin.left - margin.right,
   height = 450 - margin.top - margin.bottom;
@@ -61,27 +62,34 @@ var svg = d3.select("body")
   "Pixie Penguin","Sailor Penguin","Santa Penguin", "Tauch Penguin", "Tux Penguin",
   "Valentine Penguin","Valentine Penguin Ocal","Wizard Penguin"];
 
-  var xScale = d3.scaleBand()
+  var xScale = d3.scaleLinear()
   .range([ 0, width ])
-  .domain(pengArray)
-  .padding(0.01);
+  .domain([0,23])
+
 
   svg.append("g")
   .attr("transform", "translate(0," + height + ")")
-  .call(d3.axisBottom(x))
+  .call(d3.axisBottom(xScale))
 
-  var y = d3.scaleBand()
+  var yScale = d3.scaleLinear()
     .range([ height, 0 ])
-    .domain(pengArray)
-    .padding(0.01);
+    .domain([0,23])
   svg.append("g")
-    .call(d3.axisLeft(y));
+    .call(d3.axisLeft(yScale));
 
     var myColor = d3.scaleLinear()
   .range(["blue", "red"])
   .domain([1,100])
 
-
+  svg.selectAll()
+      .data(newCorrelations)
+      .enter()
+      .append("rect")
+      .attr("x", function(d,i) { return xScale(i%23) })
+      .attr("y", function(d,i) { return yScale((i/23)%23) })
+      .attr("width", width/23 )
+      .attr("height", height/23 )
+      .style("fill", function(d) { return myColor(d.value)} )
 
     }
 )
