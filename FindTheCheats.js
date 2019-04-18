@@ -46,9 +46,9 @@ data.then(function(data)
     });
 
   console.log(newCorrelations);
-    var margin = {top: 30, right: 30, bottom: 30, left: 30},
-  width = 450 - margin.left - margin.right,
-  height = 450 - margin.top - margin.bottom;
+    var margin = {top: 50, right: 50, bottom: 50, left: 50},
+  width = 600 - margin.left - margin.right,
+  height = 600 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("body")
@@ -62,34 +62,54 @@ var svg = d3.select("body")
   "Pixie Penguin","Sailor Penguin","Santa Penguin", "Tauch Penguin", "Tux Penguin",
   "Valentine Penguin","Valentine Penguin Ocal","Wizard Penguin"];
 
+
+
+
   var xScale = d3.scaleLinear()
   .range([ 0, width ])
-  .domain([0,23])
+  .domain([0,22])
+
 
 
   svg.append("g")
-  .attr("transform", "translate(0," + height + ")")
-  .call(d3.axisBottom(xScale))
+  .attr("transform", "translate("+((width/46)+20)+"," + (height + 30)+ ")")
+  .call(d3.axisBottom(xScale).ticks(23))
 
   var yScale = d3.scaleLinear()
     .range([ height, 0 ])
-    .domain([0,23])
+    .domain([0,22])
   svg.append("g")
-    .call(d3.axisLeft(yScale));
+  .attr("transform", "translate(0," + (height/46)+ ")")
+    .call(d3.axisRight(yScale).ticks(23));
 
     var myColor = d3.scaleLinear()
-  .range(["blue", "red"])
-  .domain([1,100])
+  .range(["blue","#a6a6a6","red"])
+  .domain([-1,0,1])
 
   svg.selectAll()
       .data(newCorrelations)
       .enter()
       .append("rect")
-      .attr("x", function(d,i) { return xScale(i%23) })
-      .attr("y", function(d,i) { return yScale((i/23)%23) })
+      .attr("x", function(d,i) { return xScale(i%23) +20})
+      .attr("y", function(d,i) { return yScale(Math.floor(i/23)) })
       .attr("width", width/23 )
       .attr("height", height/23 )
-      .style("fill", function(d) { return myColor(d.value)} )
+      .style("fill", function(d) { if(d>=0.989999999999999){return "black";}else{return myColor(d)}} )
+
+      data.forEach(function(d,i){
+        d3.select("body")
+        .append("p")
+        .attr("id",i);
+        // .innerHTML = i+": <img src="+d.picture+" alt='no'/>"
+
+      });
+
+      var i;
+      for (i=0; i < 23; i++){
+        document.getElementById(i).innerHTML = i+": <img src="+data[i].picture+" alt='no'/>"
+      }
+
+
 
     }
 )
