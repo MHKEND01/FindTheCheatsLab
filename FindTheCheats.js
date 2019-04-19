@@ -45,9 +45,8 @@ data.then(function(data)
 
     });
 
-  console.log(newCorrelations);
-    var margin = {top: 50, right: 50, bottom: 50, left: 50},
-  width = 600 - margin.left - margin.right,
+    var margin = {top: 50, right: 200, bottom: 50, left: 50},
+  width = 800 - margin.left - margin.right,
   height = 600 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
@@ -106,9 +105,34 @@ var svg = d3.select("body")
 
       var i;
       for (i=0; i < 23; i++){
-        document.getElementById(i).innerHTML = i+": <img src="+data[i].picture+" alt='no'/>"
+        document.getElementById(i).innerHTML = i+": "+pengArray[i]+"<img src=penguins/"+data[i].picture+" alt='no' width = '50' height = '50'/>"
       }
 
+      var legend = svg.append("g")
+      .attr("width", 100)
+      .attr("height", 80)
+      .attr("transform", "translate(630,0)");
+
+      var colors = ["blue", "#a6a6a6","red"];
+      var keys = ["r = -1", "r = 0", "r = 1"];
+
+       legend.selectAll("rect")
+              .data(colors)
+              .enter()
+              .append("rect")
+              .attr("width", 25)
+              .attr("height",25)
+              .attr("x", 0)
+              .attr("y", function(d,i){return 25*i;})
+              .attr("fill", function(d){return d;});
+
+        legend.selectAll('text')
+              .data(keys)
+              .enter()
+              .append("text")
+              .text(function(d){return d;})
+              .attr("x",30)
+              .attr("y", function(d,i){return (25*(i+1)) -8;});
 
 
     }
