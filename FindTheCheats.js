@@ -29,7 +29,6 @@ data.then(function(data)
 
         var correlation = ((1/(n-1))*((summations)/(Sx*Sy)));
         return correlation;})
-        console.log(correlationForPenguin)
 
       return correlationForPenguin;});
 
@@ -80,6 +79,10 @@ data.then(function(data)
                   .range(colors)
                   .domain([-0.7,0,0.75]);
 
+  var div = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
+
   svg.selectAll()
       .data(newCorrelations)
       .enter()
@@ -91,7 +94,24 @@ data.then(function(data)
       .style("fill", function(d) {
           if(d>=0.99){return "black";}
           else{return myColor(d)}
-        });
+        })
+      .on("mouseover", function(d){
+
+        div.transition()
+            .duration(200)
+            .style("opacity", .9);
+
+        div .html("Correlation: "+(d))
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 28) + "px");
+
+      })
+      .on("mouseout", function(d){
+
+        div.transition()
+            .duration(500)
+            .style("opacity", 0);
+      })
 
   data.forEach(function(d,i){
     d3.select("body")
@@ -132,5 +152,4 @@ data.then(function(data)
         .text(function(d){return d;})
         .attr("x",legendheight + 5)
         .attr("y", function(d,i){return (legendheight*(i+1)) - 8;});
-
 });
