@@ -29,6 +29,7 @@ data.then(function(data)
 
         var correlation = ((1/(n-1))*((summations)/(Sx*Sy)));
         return correlation;})
+        console.log(correlationForPenguin)
 
       return correlationForPenguin;});
 
@@ -70,14 +71,14 @@ data.then(function(data)
                  .domain([0,22]);
 
   svg.append("g")
-     .attr("transform", "translate(0," + (height/46)+ ")")
-     .call(d3.axisRight(yScale).ticks(ticks));
+     .attr("transform", "translate(20," + (height/46)+ ")")
+     .call(d3.axisLeft(yScale).ticks(ticks));
 
   var colors = ["blue", "#a6a6a6","red"];
 
   var myColor = d3.scaleLinear()
                   .range(colors)
-                  .domain([-1,0,1]);
+                  .domain([-0.7,0,0.75]);
 
   svg.selectAll()
       .data(newCorrelations)
@@ -109,7 +110,7 @@ data.then(function(data)
                   .attr("height", 80)
                   .attr("transform", "translate(630,0)");
 
-  var keys = ["r = -1", "r = 0", "r = 1"];
+  var keys = ["r = -0.7", "r = 0", "r = 0.75"];
 
   var legendwidth = 25
   var legendheight = 25
